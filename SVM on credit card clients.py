@@ -15,6 +15,8 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.preprocessing import scale
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
+
 #%%
 # load data and check the structure and information of the data
 data = pd.read_csv("C:/Users/shiji/OneDrive/python/DATASET/default of credit card clients.csv", header=1)
@@ -87,6 +89,10 @@ confusion_matrix = confusion_matrix(y_test,prediction,
                                     labels=clf_svm.classes_)
 clf_svm.classes_
 
+accuracy = accuracy_score(y_test, prediction)
+accuracy
+
+
 disp = ConfusionMatrixDisplay(confusion_matrix, display_labels=['Did not default','default'])
 disp.plot()
 #%%
@@ -99,6 +105,10 @@ optimal_parameters = GridSearchCV(SVC(), parameters,cv=5,scoring='accuracy', ver
 print(optimal_parameters)
 optimal_parameters.fit(x_train_scale, y_train)
 print(optimal_parameters.best_params_)
+print(optimal_parameters.best_score_)
+print(optimal_parameters.best_estimator_)
+
+
 # the optimal parameters are c: 100 and gamma : 0.001
 # we are going to set the parameters in our model to retrain data.
 
@@ -110,5 +120,14 @@ cm = confusion_matrix(y_test, preditcions,
 disp2 = ConfusionMatrixDisplay(cm, display_labels=['Did not default', 'default'])
 disp2.plot()
 
+acu = accuracy_score(y_test, preditcions)
+acu
 
-
+tn = cm[0,0]
+fp = cm[0,1]
+fn = cm[1,0]
+tp = cm[1,1]
+sensitivity = tp / (tp+fn)
+sensitivity
+specificity = tn /(tn + fp)
+specificity
